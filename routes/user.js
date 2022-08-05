@@ -1,15 +1,34 @@
 const {Router} = require('express')
+const {body, check} = require('express-validator')
 const controllerUser = require('../controllers/users')
+const {db_validator, email_validator, existe_usuario} = require('../helpers/db_validator')
+
+const validar_campos = require('../middlewares/validar_campos')
 const cors = require('cors')
 const router = Router()
 
 router.get('/', controllerUser.usuariosGet)
 
-router.put('/:id', controllerUser.usuariosPut)
+router.put('/:id', [
+    check('id', "No es un id de Mongo").isMongoId(),
+    check('id').custom(existe_usuario),
+    body('rol').custom(db_validator),
+    validar_campos
+],controllerUser.usuariosPut)
 
-router.post('/', controllerUser.usuariosPost)
+router.post('/',[
+    body('nombre', 'El nombre es obligatorio').not().isEmpty(),
+    body('password', 'El password debe tener mas de 6 letras').isLength( {min: 6} ),
+    body('correo').custom(email_validator),
+    body('rol').custom(db_validator),
+    validar_campos
+],controllerUser.usuariosPost)
 
-router.delete('/', controllerUser.usuariosDelete)
+router.delete('/:id',[
+    check('id', "No es un id de Mongo").isMongoId(),
+    check('id').custom(existe_usuario),
+    validar_campos
+] ,controllerUser.usuariosDelete)
 
 router.patch('/', controllerUser.usuariosPatch)
 
