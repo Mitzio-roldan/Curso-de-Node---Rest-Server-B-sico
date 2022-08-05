@@ -9,6 +9,7 @@ const db_validator = async (rol = '') => {
 }
 
 const email_validator = async(correo = "") =>{
+    
     const existe_email = await Usuario.findOne({correo});
     if(existe_email){
         throw new Error(`El correo ${correo} ya está registrado en la DB`)

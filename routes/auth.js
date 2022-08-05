@@ -1,0 +1,14 @@
+const {Router} = require('express')
+const {body, check} = require('express-validator')
+const {db_validator, email_validator, existe_usuario} = require('../helpers/db_validator')
+const validar_campos = require('../middlewares/validar_campos')
+const authController = require('../controllers/auth')
+const router = Router()
+
+router.post('/login',[
+    
+    check('password', 'La contraseña es obligatoria').not().isEmpty(),
+    validar_campos
+] ,authController.login)
+
+module.exports = router;

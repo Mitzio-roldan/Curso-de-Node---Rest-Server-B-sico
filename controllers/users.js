@@ -65,13 +65,17 @@ const controller = {
 
     usuariosDelete: async (req, res) => {
         const id = req.params.id
+        const uid = req.params.uid
+        const usuario_autenticado = req.usuario
+        
 
         const usuario = await Usuario.findByIdAndUpdate(id, {estado: false})
         
         
         
         res.status('200').json({
-            usuario
+            usuario,
+            usuario_autenticado: usuario_autenticado  
         })
 
     },

@@ -3,7 +3,7 @@ const {body, check} = require('express-validator')
 const controllerUser = require('../controllers/users')
 const {db_validator, email_validator, existe_usuario} = require('../helpers/db_validator')
 
-const validar_campos = require('../middlewares/validar_campos')
+const {validarJWT, validar_roles, validar_campos} = require('../middlewares')
 const cors = require('cors')
 const router = Router()
 
@@ -25,6 +25,8 @@ router.post('/',[
 ],controllerUser.usuariosPost)
 
 router.delete('/:id',[
+    validarJWT,
+    validar_roles(['ADMIN_ROLE']),
     check('id', "No es un id de Mongo").isMongoId(),
     check('id').custom(existe_usuario),
     validar_campos
