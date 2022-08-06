@@ -1,7 +1,7 @@
 const Usuario = require('../models/usuario')
 const bcrypt = require('bcryptjs');
 const generarJWT = require('../helpers/generar_jwt')
-
+const google_verify = require('../helpers/google_verify')
 const controller = {
 
     login: async(req, res) =>{
@@ -45,6 +45,40 @@ const controller = {
             })
         }
 
+    },
+
+    googleSingIn: async(req, res) =>{
+        const{id_token} = req.body
+        try {
+            const {name, email, picture} = await google_verify(id_token)
+            let usuario = await Usuario.findOne({correo: email})
+            if (!usuario){
+                const data = {
+                    nombre: name,
+                    correo: email,
+                    password: 'test123456',
+                    rol:'USER_ROLE',
+                    google: true
+                }
+
+                usuario = new Usuario(data)
+                await usuario.save();
+            }
+            if (!usuario.estado) {
+                return res.status(401).json({
+                    msg: "Usuario inactivo"
+                })
+            }
+            const token_user = await generarJWT(usuario.id)
+            res.json({
+                usuario,
+                token_user
+            })
+
+        } catch (error) {
+            console.log(error);
+        }
+        
     }
 
 }

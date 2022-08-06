@@ -11,4 +11,9 @@ router.post('/login',[
     validar_campos
 ] ,authController.login)
 
+router.post('/google', [
+    check('id_token', 'Token de google es necesario').not().isEmpty(),
+    validar_campos
+], authController.googleSingIn)
+
 module.exports = router;
