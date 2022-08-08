@@ -13,9 +13,9 @@ async function google_verify(token = '') {
   });
   const {name, picture, email} = ticket.getPayload();
   return ({
-    name,
+      name,
      picture, 
-     email
+       email
   })
   
 }

@@ -23,6 +23,9 @@ class server{
     routes(){
         this.app.use('/api/auth', require('../routes/auth'))
         this.app.use('/api/usuarios', require('../routes/user'))
+        this.app.use('/api/categorias', require('../routes/categorias'))
+        this.app.use('/api/productos', require('../routes/productos'))
+        this.app.use('/api/buscar', require('../routes/buscar'))
 
     }
     listen(){
