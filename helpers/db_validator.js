@@ -39,4 +39,13 @@ const existeProducto = async (id = '') =>{
     }
 }
 
-module.exports = {db_validator, email_validator, existe_usuario, existeCategoria, existeProducto};
+const validarColeccionesPermitidas = (coleccion = '', colecciones= []) =>{
+    const incluida = colecciones.includes(coleccion)
+    if(!incluida){
+        throw new Error(`Coleccion no existe`)
+    }
+    return true
+
+}
+
+module.exports = {db_validator, email_validator, existe_usuario, existeCategoria, existeProducto, validarColeccionesPermitidas};
